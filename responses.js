@@ -258,57 +258,100 @@ const MESSAGE_TEMPLATES = {
   email: {
     polite: [
       "Hi team,\n\nThis looks like something we can handle asynchronously. I'm sending the details here so everyone can review on their own time and reply if needed.\n\nThanks.",
-      "Hello,\n\nI don't think we need a meeting for this one. Sharing the context here so we can keep things moving without adding calendar time.\n\nBest,"
+      "Hello,\n\nI don't think we need a meeting for this one. Sharing the context here so we can keep things moving without adding calendar time.\n\nBest,",
+      "Hi everyone,\n\nI'm sending this as a note instead of booking time so you can review it when convenient. If anything needs clarification, feel free to reply here.\n\nThank you,",
+      "Hello team,\n\nTo keep things efficient, I'm outlining the situation here instead of scheduling a call. Please send any feedback or decisions directly in reply.\n\nBest regards,",
+      "Hi all,\n\nThis seems straightforward enough to handle in writing. I've included the context below so we can keep progress moving without another meeting on the calendar.\n\nThanks,"
     ],
     direct: [
       "Team,\n\nNo meeting needed. Please review the details in this message and respond here if anything needs discussion.\n",
-      "Sending this async so we can keep momentum. Please reply with questions or approvals by end of day.\n"
+      "Sending this async so we can keep momentum. Please reply with questions or approvals by end of day.\n",
+      "No call for this. Review the details below and respond in writing.\n",
+      "Keeping this out of the calendar. Please read, reply, and move it forward.\n",
+      "This can stay async. Send your answer or approval here once you've reviewed it.\n"
     ],
     passiveAggressive: [
       "Hi all,\n\nTo save everyone the joy of another meeting, I'm putting the full context here. Please review and respond directly so we can avoid scheduling what could be three sentences.\n",
-      "Sharing this in writing since that is still technically allowed. If anything truly requires discussion, we can revisit after people have actually read it.\n"
+      "Sharing this in writing since that is still technically allowed. If anything truly requires discussion, we can revisit after people have actually read it.\n",
+      "Putting this in an email first, on the off chance we can solve it without inviting eight people to watch each other paraphrase.\n",
+      "Documenting this here because written communication remains dramatically faster than pretending every update deserves live commentary.\n",
+      "Sending the details below so we can try the unusual experiment of reading before scheduling.\n"
     ],
     brutal: [
       "No meeting.\n\nRead this, reply if necessary, and let's not convert basic literacy into a recurring event.\n",
-      "This is being handled by message because it never deserved a calendar invite in the first place.\n"
+      "This is being handled by message because it never deserved a calendar invite in the first place.\n",
+      "Here is the information. Consume it asynchronously and leave the calendar out of it.\n",
+      "This belongs in writing. If someone tries to schedule it, that is a separate problem.\n",
+      "The answer is still email. Read, respond, continue functioning.\n"
     ]
   },
   chat: {
     polite: [
       "Quick question when you have a moment: can you help with this? I don't think it needs a meeting, just a fast answer here.\n",
-      "Hi, sending this as a quick chat rather than scheduling time. Can you confirm the right next step when you're free?\n"
+      "Hi, sending this as a quick chat rather than scheduling time. Can you confirm the right next step when you're free?\n",
+      "Hi, this seems like a quick one. Can you reply here when you have a minute so we can keep it moving?\n",
+      "Hello, I think a short message should do the job here. Can you confirm the answer in chat when convenient?\n",
+      "Quick note instead of a meeting invite: can you take a look and reply here when you're able?\n"
     ],
     direct: [
       "Quick check: what's the answer here?\nNo meeting needed, just reply in chat.\n",
-      "Can you confirm this in chat today? Trying to keep this out of the calendar.\n"
+      "Can you confirm this in chat today? Trying to keep this out of the calendar.\n",
+      "Need a quick answer here. Reply in chat when you see this.\n",
+      "This should be a message, not a meeting. Send the answer here.\n",
+      "Can you resolve this in chat today? No need to schedule time.\n"
     ],
     passiveAggressive: [
       "Using chat because I'm optimistic this can be resolved in one message instead of thirty minutes.\nCan you confirm?\n",
-      "Trying the radical approach of asking this directly in chat before anyone sends an invite. What's the answer?\n"
+      "Trying the radical approach of asking this directly in chat before anyone sends an invite. What's the answer?\n",
+      "Posting this here first in the faint hope that a keyboard can spare us all a calendar event.\nCan you reply?\n",
+      "Seeing whether this can survive as a chat message before it is promoted to a fully unnecessary meeting.\n",
+      "Attempting the efficient version first: one message, one answer, no synchronized performance.\n"
     ],
     brutal: [
       "Answer here.\nIf this turns into a meeting, something has gone badly wrong.\n",
-      "Quick reply needed. Let's not schedule a call to exchange one sentence.\n"
+      "Quick reply needed. Let's not schedule a call to exchange one sentence.\n",
+      "Reply in chat. If this becomes a meeting, we've failed.\n",
+      "Need the answer here, not in a room full of microphones.\n",
+      "One message should end this. Do not escalate it into a call.\n"
     ]
   },
   meeting: {
     polite: [
       "I think this one would benefit from a short meeting so we can resolve the open points live and leave with a decision. I'll keep the group tight and the agenda focused.\n",
-      "This seems complex enough to justify a brief sync. I'll propose a short meeting with the key people only and circulate outcomes afterward.\n"
+      "This seems complex enough to justify a brief sync. I'll propose a short meeting with the key people only and circulate outcomes afterward.\n",
+      "This looks like a case where a short meeting could save time overall. I'll keep it focused and make sure we leave with clear next steps.\n",
+      "I think a brief discussion with the right people would help us resolve this efficiently. I'll keep the meeting short and outcome-oriented.\n",
+      "This may be easier to sort out in real time. I'll propose a concise meeting with a clear objective and send follow-up notes afterward.\n"
     ],
     direct: [
       "This needs a short meeting. We have dependencies to sort through and should leave with a decision.\n",
-      "Let's do a focused meeting with the relevant people only. Goal: resolve the open questions and move on.\n"
+      "Let's do a focused meeting with the relevant people only. Goal: resolve the open questions and move on.\n",
+      "Book a short meeting. We need live discussion to settle this.\n",
+      "This should be handled in a tight meeting with the decision-makers only.\n",
+      "Let's meet briefly, resolve the open issues, and close it out.\n"
     ],
     passiveAggressive: [
       "This is one of the rare cases where a meeting may actually be faster than another chain of fragmented messages. Let's keep it short enough to remain defensible.\n",
-      "Reluctantly recommending a meeting here because the async version will likely become twelve separate misunderstandings.\n"
+      "Reluctantly recommending a meeting here because the async version will likely become twelve separate misunderstandings.\n",
+      "It appears we have found one of the few situations where a meeting might do less damage than continued back-and-forth.\n",
+      "Suggesting a short meeting before this turns into a sprawling message chain with no owner and no outcome.\n",
+      "A brief meeting may be the least inefficient option available here, which is not a sentence I enjoy writing.\n"
     ],
     brutal: [
       "Fine. Book the meeting.\nSmall group, clear decision, no wandering, no storytelling.\n",
-      "This has barely earned synchronous time. Keep it short, useful, and aggressively specific.\n"
+      "This has barely earned synchronous time. Keep it short, useful, and aggressively specific.\n",
+      "Meeting approved. Keep the attendee list small and the nonsense smaller.\n",
+      "Book the call, make the decision, end it fast.\n",
+      "This can be a meeting, but only if it behaves like one.\n"
     ]
   }
+};
+
+const LAST_MESSAGE_BY_TONE = {
+  polite: "",
+  direct: "",
+  passiveAggressive: "",
+  brutal: ""
 };
 
 const CATEGORY_LABELS = {
@@ -492,5 +535,20 @@ function getResponseForScenario(input) {
 
 function getGeneratedMessage(result, tone) {
   const toneSet = MESSAGE_TEMPLATES[result.verdict][tone] || MESSAGE_TEMPLATES[result.verdict].polite;
-  return randomFrom(toneSet);
+  if (toneSet.length === 1) {
+    LAST_MESSAGE_BY_TONE[tone] = toneSet[0];
+    return toneSet[0];
+  }
+
+  const lastMessage = LAST_MESSAGE_BY_TONE[tone];
+  let message = randomFrom(toneSet);
+  let attempts = 0;
+
+  while (message === lastMessage && attempts < 6) {
+    message = randomFrom(toneSet);
+    attempts += 1;
+  }
+
+  LAST_MESSAGE_BY_TONE[tone] = message;
+  return message;
 }

@@ -8,7 +8,7 @@
     name="description"
     content="Should this be a meeting? A static productivity tool that decides whether your scenario needs an email, chat, or an actual meeting."
   >
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260423-3">
 </head>
 <body>
   <div class="page-shell">
@@ -26,11 +26,15 @@
       </header>
 
       <section class="input-panel">
+        <div class="step-label active" data-step="1">
+          <span class="step-number">Step 1</span>
+          <span class="step-title">Describe your situation</span>
+        </div>
         <label class="field-label" for="scenario">What is happening?</label>
         <textarea
           id="scenario"
           name="scenario"
-          rows="6"
+          rows="4"
           maxlength="1200"
           placeholder="Example: I need to ask three people for a quick status update, but someone keeps suggesting a 45-minute sync."
         ></textarea>
@@ -49,11 +53,11 @@
         </div>
 
         <div id="verdictCard" class="verdict-card hidden">
+          <div class="step-label" data-step="2">
+            <span class="step-number">Step 2</span>
+            <span class="step-title">Review the recommendation</span>
+          </div>
           <div class="verdict-header">
-            <div id="verdictBadge" class="verdict-badge">
-              <span id="verdictIcon" class="verdict-icon" aria-hidden="true">&#x2709;</span>
-              <span id="verdictLabel">Email</span>
-            </div>
             <p id="categoryTag" class="category-tag">Status update</p>
           </div>
 
@@ -62,16 +66,15 @@
 
           <div class="verdict-meta">
             <span id="confidenceChip" class="meta-chip">Confidence: high</span>
-            <span id="scenarioChip" class="meta-chip">Input type: concise</span>
           </div>
 
           <div class="verdict-actions">
-            <button id="tryAnotherButton" class="ghost-button" type="button">
-              Try another
-            </button>
-            <button id="generateButton" class="secondary-button" type="button">
-              Generate Message
-            </button>
+            <div class="generate-cta">
+              <p class="generate-helper">Next: generate a message you can send</p>
+              <button id="generateButton" class="primary-result-button" type="button">
+                Generate another message
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -79,8 +82,16 @@
       <section id="messageSection" class="message-section hidden">
         <div class="message-header">
           <div>
+            <div class="step-label" data-step="3">
+              <span class="step-number">Step 3</span>
+              <span class="step-title">Generate a message</span>
+            </div>
             <p class="section-kicker">Message Generator</p>
             <h3>Pick a tone</h3>
+          </div>
+          <div class="tone-guidance" aria-hidden="true">
+            <span class="cta-hint-arrow">→</span>
+            <span class="cta-hint-text">Use these next</span>
           </div>
           <div id="toneButtons" class="tone-buttons" role="tablist" aria-label="Message tones">
             <button class="tone-button active" type="button" data-tone="polite">Polite</button>
@@ -92,13 +103,51 @@
 
         <div class="message-card">
           <p id="messageOutput" class="message-output"></p>
-          <button id="copyButton" class="copy-button" type="button">Copy Message</button>
+          <div class="message-actions">
+            <button id="startOverButton" class="secondary-button start-over-button" type="button">Start Over</button>
+            <button id="copyButton" class="copy-button" type="button">Copy Message</button>
+          </div>
         </div>
       </section>
     </main>
   </div>
 
-  <script src="responses.js"></script>
-  <script src="app.js"></script>
+  <script src="responses.js?v=20260423-3"></script>
+  <script src="app.js?v=20260423-3"></script>
+
+  <a
+    class="spinning-logo"
+    href="https://nathalievaiser.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Visit Nathalie Vaiser's website"
+  >
+    <div class="spinning-logo-inner">
+      <svg viewBox="-10 -10 140 148" class="spinning-svg">
+        <circle class="robot-frame" cx="60" cy="64" r="52" />
+        <path class="robot-head" d="M26,32 C25,27 28,22 34,21 L86,20 C92,20 95,25 94,32 L92,50 C91,54 88,57 82,58 L38,59 C32,59 28,56 27,50 Z" />
+        <path class="robot-shadow" d="M26,32 C25,27 28,22 34,21 L60,20.5 L60,58.5 L38,59 C32,59 28,56 27,50 Z" />
+        <path class="robot-highlight" d="M60,20.5 L86,20 C92,20 95,25 94,32 L92,50 C91,54 88,57 82,58 L60,58.5 Z" />
+        <ellipse class="robot-eye-socket" cx="43" cy="39" rx="9" ry="8" />
+        <ellipse class="robot-eye-socket" cx="77" cy="38" rx="10" ry="8" />
+        <ellipse class="robot-eye" cx="44" cy="38" rx="5" ry="4.5" />
+        <ellipse class="robot-eye" cx="78" cy="37" rx="5.5" ry="4.5" />
+        <circle class="robot-rivet" cx="31" cy="26" r="2" />
+        <circle class="robot-rivet" cx="89" cy="25" r="2" />
+        <circle class="robot-rivet" cx="35" cy="52" r="1.5" />
+        <circle class="robot-rivet" cx="85" cy="51" r="1.5" />
+        <line class="robot-antenna" x1="60" y1="20" x2="60" y2="8" />
+        <path class="robot-antenna" d="M56,8 C56,4 58,2 60,2 C62,2 64,4 64,8" />
+        <circle class="robot-antenna-tip" cx="60" cy="3" r="2.5" />
+        <path class="robot-body" d="M50,59 L48,68 C48,70 51,72 54,72 L66,72 C69,72 72,70 72,68 L70,59" />
+        <path class="robot-body" d="M38,72 C35,72 33,74 33,77 L30,100 C30,104 33,107 38,107 L82,107 C87,107 90,104 90,100 L87,77 C87,74 85,72 82,72 Z" />
+        <path class="robot-shadow" d="M38,72 C35,72 33,74 33,77 L30,100 C30,104 33,107 38,107 L60,107 L60,72 Z" />
+        <rect class="robot-detail" x="48" y="80" width="24" height="14" rx="3" />
+        <line class="robot-detail" x1="56" y1="80" x2="56" y2="94" />
+        <line class="robot-detail" x1="64" y1="80" x2="64" y2="94" />
+        <line class="robot-detail" x1="48" y1="87" x2="72" y2="87" />
+      </svg>
+    </div>
+  </a>
 </body>
 </html>

@@ -1,5 +1,6 @@
-const ANALYSIS_DURATION_MS = 1500;
-const LOADER_ROTATION_MS = 450;
+const ANALYSIS_DURATION_MS = 6500;
+const LOADER_ROTATION_MS = 1500;
+const COMMON_SENSE_EXTRA_MS = 2400;
 
 const state = {
   activeTone: "polite",
@@ -17,21 +18,24 @@ const elements = {
   loaderCard: document.getElementById("loaderCard"),
   loaderMessage: document.getElementById("loaderMessage"),
   verdictCard: document.getElementById("verdictCard"),
-  verdictBadge: document.getElementById("verdictBadge"),
-  verdictIcon: document.getElementById("verdictIcon"),
-  verdictLabel: document.getElementById("verdictLabel"),
   categoryTag: document.getElementById("categoryTag"),
   verdictTitle: document.getElementById("verdictTitle"),
   verdictExplanation: document.getElementById("verdictExplanation"),
   confidenceChip: document.getElementById("confidenceChip"),
-  scenarioChip: document.getElementById("scenarioChip"),
-  tryAnotherButton: document.getElementById("tryAnotherButton"),
   generateButton: document.getElementById("generateButton"),
   messageSection: document.getElementById("messageSection"),
   toneButtons: Array.from(document.querySelectorAll(".tone-button")),
   messageOutput: document.getElementById("messageOutput"),
-  copyButton: document.getElementById("copyButton")
+  copyButton: document.getElementById("copyButton"),
+  startOverButton: document.getElementById("startOverButton"),
+  stepLabels: Array.from(document.querySelectorAll(".step-label"))
 };
+
+function setActiveStep(stepNumber) {
+  elements.stepLabels.forEach((label) => {
+    label.classList.toggle("active", label.dataset.step === String(stepNumber));
+  });
+}
 
 function resetLoaderTimers() {
   if (state.loaderIntervalId) {
@@ -63,14 +67,25 @@ function renderVerdict(result) {
 
   elements.loaderCard.classList.add("hidden");
   elements.verdictCard.classList.remove("hidden");
-  elements.verdictBadge.className = `verdict-badge ${verdictConfig.badgeClass}`;
-  elements.verdictIcon.textContent = verdictConfig.icon;
-  elements.verdictLabel.textContent = verdictConfig.label;
+  elements.verdictCard.classList.remove("animate-in");
+  void elements.verdictCard.offsetWidth;
+  elements.verdictCard.classList.add("animate-in");
   elements.categoryTag.textContent = result.categoryLabel;
   elements.verdictTitle.textContent = `${verdictConfig.label}.`;
   elements.verdictExplanation.textContent = result.explanation;
   elements.confidenceChip.textContent = `Confidence: ${result.confidence}`;
-  elements.scenarioChip.textContent = `Input type: ${result.inputType}`;
+
+  state.activeTone = "polite";
+  for (const button of elements.toneButtons) {
+    button.classList.toggle("active", button.dataset.tone === state.activeTone);
+  }
+
+  elements.messageSection.classList.remove("hidden");
+  syncMessageHeight();
+  renderMessage();
+  window.setTimeout(() => {
+    elements.verdictCard.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 180);
 }
 
 function renderMessage() {
@@ -82,21 +97,86 @@ function renderMessage() {
   elements.messageOutput.textContent = message;
 }
 
+function syncMessageHeight() {
+  if (!state.latestResult || !elements.messageOutput) {
+    return;
+  }
+
+  const toneSets = MESSAGE_TEMPLATES[state.latestResult.verdict];
+  if (!toneSets) {
+    return;
+  }
+
+  const width = Math.max(
+    elements.messageOutput.getBoundingClientRect().width,
+    elements.messageOutput.clientWidth
+  );
+
+  if (!width) {
+    return;
+  }
+
+  const computed = window.getComputedStyle(elements.messageOutput);
+  const measurer = document.createElement("div");
+  measurer.style.position = "absolute";
+  measurer.style.visibility = "hidden";
+  measurer.style.pointerEvents = "none";
+  measurer.style.left = "-9999px";
+  measurer.style.top = "0";
+  measurer.style.width = `${width}px`;
+  measurer.style.padding = computed.padding;
+  measurer.style.border = computed.border;
+  measurer.style.borderRadius = computed.borderRadius;
+  measurer.style.font = computed.font;
+  measurer.style.fontSize = computed.fontSize;
+  measurer.style.fontWeight = computed.fontWeight;
+  measurer.style.lineHeight = computed.lineHeight;
+  measurer.style.letterSpacing = computed.letterSpacing;
+  measurer.style.whiteSpace = computed.whiteSpace;
+  measurer.style.boxSizing = computed.boxSizing;
+  measurer.style.wordBreak = computed.wordBreak;
+  measurer.style.overflowWrap = computed.overflowWrap;
+
+  document.body.appendChild(measurer);
+
+  let tallest = 0;
+  for (const messages of Object.values(toneSets)) {
+    for (const message of messages) {
+      measurer.textContent = message;
+      tallest = Math.max(tallest, measurer.offsetHeight);
+    }
+  }
+
+  document.body.removeChild(measurer);
+
+  if (tallest > 0) {
+    elements.messageOutput.style.minHeight = `${tallest}px`;
+  }
+}
+
 function startAnalysis(input) {
   resetLoaderTimers();
   showLoader();
+  setActiveStep(2);
+  elements.resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
   state.latestInput = input;
   elements.checkButton.disabled = true;
   elements.checkButton.textContent = "Analyzing...";
-  elements.tryAnotherButton.disabled = true;
 
   let loaderIndex = 0;
   elements.loaderMessage.textContent = LOADER_MESSAGES[loaderIndex];
-
-  state.loaderIntervalId = window.setInterval(() => {
+  const advanceLoaderMessage = () => {
     loaderIndex = (loaderIndex + 1) % LOADER_MESSAGES.length;
     elements.loaderMessage.textContent = LOADER_MESSAGES[loaderIndex];
-  }, LOADER_ROTATION_MS);
+
+    const currentDelay = LOADER_MESSAGES[loaderIndex] === "Running common sense filter..."
+      ? LOADER_ROTATION_MS + COMMON_SENSE_EXTRA_MS
+      : LOADER_ROTATION_MS;
+
+    state.loaderIntervalId = window.setTimeout(advanceLoaderMessage, currentDelay);
+  };
+
+  state.loaderIntervalId = window.setTimeout(advanceLoaderMessage, LOADER_ROTATION_MS);
 
   state.loaderTimeoutId = window.setTimeout(() => {
     resetLoaderTimers();
@@ -104,7 +184,6 @@ function startAnalysis(input) {
     renderVerdict(state.latestResult);
     elements.checkButton.disabled = false;
     elements.checkButton.textContent = "Check";
-    elements.tryAnotherButton.disabled = false;
   }, ANALYSIS_DURATION_MS);
 }
 
@@ -159,9 +238,32 @@ async function handleCopy() {
   }
 }
 
+function handleStartOver() {
+  resetLoaderTimers();
+  state.latestResult = null;
+  state.latestInput = "";
+  state.activeTone = "polite";
+  elements.scenario.value = "";
+  elements.checkButton.disabled = false;
+  elements.checkButton.textContent = "Check";
+  elements.resultSection.classList.add("hidden");
+  elements.loaderCard.classList.add("hidden");
+  elements.verdictCard.classList.add("hidden");
+  elements.messageSection.classList.add("hidden");
+  elements.toneButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.tone === "polite");
+  });
+  elements.messageOutput.style.minHeight = "";
+  setHint("Be specific. Rambling will be judged accordingly.");
+  setActiveStep(1);
+  elements.scenario.focus();
+  elements.scenario.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 elements.checkButton.addEventListener("click", handleCheck);
 
 elements.generateButton.addEventListener("click", () => {
+  setActiveStep(3);
   state.activeTone = "polite";
   for (const button of elements.toneButtons) {
     button.classList.toggle("active", button.dataset.tone === state.activeTone);
@@ -172,31 +274,31 @@ elements.generateButton.addEventListener("click", () => {
   elements.messageSection.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-elements.tryAnotherButton.addEventListener("click", () => {
-  const input = state.latestInput || elements.scenario.value.trim();
-  if (!input) {
-    return;
-  }
-
-  startAnalysis(input);
-});
-
 elements.toneButtons.forEach((button) => {
   button.addEventListener("click", () => {
     state.activeTone = button.dataset.tone;
     elements.toneButtons.forEach((candidate) => {
       candidate.classList.toggle("active", candidate === button);
     });
+    syncMessageHeight();
     renderMessage();
   });
 });
 
 elements.copyButton.addEventListener("click", handleCopy);
+elements.startOverButton.addEventListener("click", handleStartOver);
 
 elements.scenario.addEventListener("input", () => {
   if (elements.scenario.value.trim()) {
     setHint("Be specific. Rambling will be judged accordingly.");
   }
+
+  setActiveStep(1);
 });
 
 window.addEventListener("beforeunload", resetLoaderTimers);
+window.addEventListener("resize", () => {
+  if (state.latestResult) {
+    syncMessageHeight();
+  }
+});
