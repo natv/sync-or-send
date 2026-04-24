@@ -404,24 +404,6 @@ textarea:focus {
   border: 1px solid var(--border);
 }
 
-.verdict-actions {
-  display: block;
-  width: 100%;
-}
-
-.generate-cta {
-  display: block;
-  max-width: 100%;
-  width: 100%;
-}
-
-.generate-helper {
-  margin: 0 0 10px;
-  color: var(--muted);
-  font-size: 0.92rem;
-  font-weight: 700;
-}
-
 .tone-guidance {
   display: inline-flex;
   align-items: center;
@@ -499,6 +481,7 @@ textarea:focus {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
   width: 100%;
 }
@@ -512,6 +495,12 @@ textarea:focus {
 .start-over-button {
   background: #27272a;
   color: #fff;
+}
+
+.regenerate-button {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  border: 1px solid var(--border);
 }
 
 .hidden {
@@ -903,17 +892,9 @@ textarea:focus {
     margin-bottom: 2px;
   }
 
-  .verdict-actions {
-    display: block;
-  }
-
   .meta-chip {
     padding: 7px 10px;
     font-size: 0.84rem;
-  }
-
-  .primary-result-button {
-    padding: 12px 16px;
   }
 
   .primary-button,
@@ -922,10 +903,6 @@ textarea:focus {
   .primary-result-button,
   .copy-button,
   .start-over-button {
-    width: 100%;
-  }
-
-  .generate-cta {
     width: 100%;
   }
 
@@ -1079,17 +1056,8 @@ textarea:focus {
     font-size: 0.8rem;
   }
 
-  .generate-helper,
   .tone-guidance {
     display: none;
-  }
-
-  .verdict-actions {
-    display: block;
-  }
-
-  .primary-result-button {
-    padding: 11px 14px;
   }
 
   .tone-buttons {
@@ -1170,10 +1138,6 @@ textarea:focus {
   .meta-chip {
     padding: 5px 8px;
     font-size: 0.76rem;
-  }
-
-  .primary-result-button {
-    padding: 10px 14px;
   }
 
   .tone-buttons {
