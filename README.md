@@ -4,6 +4,8 @@
 
 **Should this be a meeting?**
 
+![App Screenshot](assets/sync.jpg)
+
 The app looks like a productivity tool, but the verdicts are intentionally dry, judgmental, and a little ridiculous. A user pastes a work scenario, clicks `Check`, waits through a fake analysis phase, and gets a recommendation:
 
 - `Email`
