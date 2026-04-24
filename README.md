@@ -1,58 +1,70 @@
 # Sync or Send
 
-`Sync or Send` is a lightweight static web app that answers one question:
-
 **Should this be a meeting?**
+
+A lightweight web app that answers that question with more honesty than your calendar ever will.
+
+👉 **Live demo:** https://sync.nathalievaiser.com/
 
 ![App Screenshot](assets/sync.jpg)
 
-The app looks like a productivity tool, but the verdicts are intentionally dry, judgmental, and a little ridiculous. A user pastes a work scenario, clicks `Check`, waits through a fake analysis phase, and gets a recommendation:
+---
 
+## What It Is
+
+`Sync or Send` looks like a normal productivity tool.
+
+It is not.
+
+Paste in a work scenario, click `Check`, and it will tell you whether this should be:
 - `Email`
 - `Teams or Slack`
 - `Meeting`
 
-If they want, they can then generate a copyable message in one of four tones:
+Most of the time, it’s not a meeting.
+
+If you want, you can generate a message to send back in one of four tones:
 
 - `Polite`
 - `Direct`
 - `Passive Aggressive`
 - `Brutal`
 
+---
+
+## Why It Exists
+
+Too many meetings exist because:
+- writing feels harder than talking  
+- decisions aren’t made ahead of time  
+- “alignment” becomes a default  
+
+This app leans into that reality.
+
+It behaves like a real SaaS tool, but the responses are intentionally:
+- dry  
+- judgmental  
+- occasionally unnecessary  
+
+---
+
 ## What It Does
 
-- Takes a freeform scenario in a textarea
-- Runs a short fake analysis animation
-- Classifies the input with simple keyword and length rules
-- Returns a verdict and humorous explanation
-- Lets the user regenerate a fresh verdict from the same input with `Try another`
-- Generates copyable follow-up messages based on the verdict and selected tone
-- Works as a fully static frontend with no backend, auth, database, or external APIs
+- Accepts a freeform scenario
+- Runs a short fake “analysis” phase
+- Classifies the input using simple rules
+- Returns a verdict + explanation
+- Lets you reroll with `Try another`
+- Generates copyable messages based on tone
+- Works entirely as a static frontend (no backend, no APIs)
 
-## Tech Stack
-
-- HTML
-- CSS
-- Vanilla JavaScript
-
-No build step is required.
-
-## Project Structure
-
-```text
-.
-├── index.html
-├── styles.css
-├── app.js
-├── responses.js
-└── README.md
-```
+---
 
 ## How It Works
 
 ### Verdict logic
 
-The app uses keyword detection plus input length to map a scenario into categories such as:
+Scenarios are mapped using keyword detection and input length into categories like:
 
 - `status update`
 - `FYI / info`
@@ -67,64 +79,48 @@ The app uses keyword detection plus input length to map a scenario into categori
 - `generic`
 - `legit meeting`
 
-Most categories map to a default verdict. Only the `generic` bucket uses weighted randomness, biased heavily toward async communication.
+Most categories resolve deterministically.
+
+Only the `generic` bucket uses weighted randomness (heavily biased toward async).
+
+---
 
 ### Response system
 
-- `responses.js` contains `180` verdict explanations across the categories
-- The app keeps verdict and explanation aligned so the copy does not contradict itself
-- The message generator uses separate templates for each verdict and tone
+- `responses.js` contains 180+ explanations across categories
+- Verdict and explanation are always aligned
+- Message generation is tone-based and templated
+
+---
 
 ### UX flow
 
-1. User enters a scenario
-2. User clicks `Check`
-3. App shows rotating fake analysis messages for about `1.5 seconds`
-4. App reveals the verdict and explanation
-5. User can click `Try another` to reroll from the same input
-6. User can click `Generate Message`
-7. User can switch tones and copy the message
+1. Enter a scenario  
+2. Click `Check`  
+3. Wait ~1.5s while it “analyzes”  
+4. Get a verdict + explanation  
+5. Optionally reroll (`Try another`)  
+6. Generate a message  
+7. Switch tone and copy  
 
-## Running Locally
+---
 
-Because the app is static, you can run it by opening `index.html` directly in a browser.
+## Tech Stack
 
-If you want to serve it locally instead of opening the file directly, any static server works. For example:
+- HTML  
+- CSS  
+- Vanilla JavaScript  
 
-```powershell
-python -m http.server 8000
-```
+No framework. No build step.
 
-Then open `http://localhost:8000`.
+---
 
-## Validation
+## Project Structure
 
-The project has been checked with:
-
-```powershell
-node --check app.js
-node --check responses.js
-```
-
-Additional logic checks were run against representative scenarios to confirm:
-
-- email-style scenarios resolve to `Email`
-- short question and incident scenarios resolve to `Teams or Slack`
-- brainstorm / decision / dependency scenarios resolve to `Meeting`
-- long inputs resolve to the `rambling` path
-
-## Deployment
-
-This app is suitable for any static hosting platform, including:
-
-- GitHub Pages
-- Netlify
-- Vercel static hosting
-- Cloudflare Pages
-
-Because there is no backend, deployment is just serving the repository contents as static files.
-
-## Notes
-
-- Clipboard copy uses the modern clipboard API when available and falls back to a legacy copy approach otherwise.
-- The app is intentionally humorous. It should feel like a real SaaS tool on first glance, but the copy is the joke.
+```text
+.
+├── index.html
+├── styles.css
+├── app.js
+├── responses.js
+└── README.md
