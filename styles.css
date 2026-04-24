@@ -1018,9 +1018,6 @@ textarea:focus {
     padding: 12px;
   }
 
-  .spinning-logo {
-    display: none;
-  }
 }
 
 @media (max-width: 390px) {
