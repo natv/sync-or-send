@@ -7,7 +7,10 @@ const state = {
   latestResult: null,
   latestInput: "",
   loaderIntervalId: null,
-  loaderTimeoutId: null
+  loaderTimeoutId: null,
+  messageFlashTimeoutId: null,
+  verdictFlashTimeoutId: null,
+  toneFlashTimeoutId: null
 };
 
 const elements = {
@@ -49,6 +52,29 @@ function resetLoaderTimers() {
   }
 }
 
+function resetMessageFlash() {
+  if (state.messageFlashTimeoutId) {
+    window.clearTimeout(state.messageFlashTimeoutId);
+    state.messageFlashTimeoutId = null;
+  }
+
+  if (state.verdictFlashTimeoutId) {
+    window.clearTimeout(state.verdictFlashTimeoutId);
+    state.verdictFlashTimeoutId = null;
+  }
+
+  if (state.toneFlashTimeoutId) {
+    window.clearTimeout(state.toneFlashTimeoutId);
+    state.toneFlashTimeoutId = null;
+  }
+
+  elements.verdictTitle.classList.remove("flash-attention");
+  elements.messageOutput.classList.remove("flash-attention");
+  elements.toneButtons.forEach((button) => {
+    button.classList.remove("flash-attention");
+  });
+}
+
 function setHint(text, isError = false) {
   elements.inputHint.textContent = text;
   elements.inputHint.classList.toggle("error-text", isError);
@@ -83,6 +109,7 @@ function renderVerdict(result) {
   elements.messageSection.classList.remove("hidden");
   syncMessageHeight();
   renderMessage();
+  scheduleMessageFlash();
   window.setTimeout(() => {
     elements.verdictCard.scrollIntoView({ behavior: "smooth", block: "start" });
   }, 180);
@@ -95,6 +122,33 @@ function renderMessage() {
 
   const message = getGeneratedMessage(state.latestResult, state.activeTone);
   elements.messageOutput.textContent = message;
+}
+
+function scheduleMessageFlash() {
+  resetMessageFlash();
+  elements.verdictTitle.classList.add("flash-attention");
+  state.verdictFlashTimeoutId = window.setTimeout(() => {
+    elements.verdictTitle.classList.remove("flash-attention");
+  }, 2400);
+
+  state.messageFlashTimeoutId = window.setTimeout(() => {
+    elements.messageOutput.classList.add("flash-attention");
+    window.setTimeout(() => {
+      elements.messageOutput.classList.remove("flash-attention");
+    }, 1800);
+  }, 4200);
+
+  state.toneFlashTimeoutId = window.setTimeout(() => {
+    elements.toneButtons.forEach((button) => {
+      button.classList.add("flash-attention");
+    });
+
+    window.setTimeout(() => {
+      elements.toneButtons.forEach((button) => {
+        button.classList.remove("flash-attention");
+      });
+    }, 1400);
+  }, 9200);
 }
 
 function syncMessageHeight() {
@@ -250,6 +304,7 @@ function handleStartOver() {
   elements.loaderCard.classList.add("hidden");
   elements.verdictCard.classList.add("hidden");
   elements.messageSection.classList.add("hidden");
+  resetMessageFlash();
   elements.toneButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.tone === "polite");
   });
@@ -271,6 +326,7 @@ elements.generateButton.addEventListener("click", () => {
 
   renderMessage();
   elements.messageSection.classList.remove("hidden");
+  scheduleMessageFlash();
   elements.messageSection.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
@@ -282,6 +338,7 @@ elements.toneButtons.forEach((button) => {
     });
     syncMessageHeight();
     renderMessage();
+    scheduleMessageFlash();
   });
 });
 
@@ -296,7 +353,10 @@ elements.scenario.addEventListener("input", () => {
   setActiveStep(1);
 });
 
-window.addEventListener("beforeunload", resetLoaderTimers);
+window.addEventListener("beforeunload", () => {
+  resetLoaderTimers();
+  resetMessageFlash();
+});
 window.addEventListener("resize", () => {
   if (state.latestResult) {
     syncMessageHeight();
