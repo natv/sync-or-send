@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sync or Send</title>
+  <meta
+    name="description"
+    content="Should this be a meeting? A static productivity tool that decides whether your scenario needs an email, chat, or an actual meeting."
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <div class="ambient ambient-left"></div>
+    <div class="ambient ambient-right"></div>
+
+    <main class="app-card">
+      <header class="hero">
+        <div class="eyebrow">Sync or Send</div>
+        <h1>Should this be a meeting?</h1>
+        <p class="hero-copy">
+          Paste the situation. We will apply a very serious, definitely scientific
+          communication triage process.
+        </p>
+      </header>
+
+      <section class="input-panel">
+        <label class="field-label" for="scenario">What is happening?</label>
+        <textarea
+          id="scenario"
+          name="scenario"
+          rows="6"
+          maxlength="1200"
+          placeholder="Example: I need to ask three people for a quick status update, but someone keeps suggesting a 45-minute sync."
+        ></textarea>
+        <div class="input-footer">
+          <p id="inputHint" class="input-hint">Be specific. Rambling will be judged accordingly.</p>
+          <button id="checkButton" class="primary-button" type="button">Check</button>
+        </div>
+      </section>
+
+      <section id="resultSection" class="result-section hidden" aria-live="polite">
+        <div id="loaderCard" class="loader-card hidden">
+          <div class="loader-spinner" aria-hidden="true"></div>
+          <p class="loader-kicker">Analyzing...</p>
+          <p id="loaderMessage" class="loader-message">Analyzing meeting necessity...</p>
+          <p class="loader-subtle">Please wait while we consult the productivity spirits.</p>
+        </div>
+
+        <div id="verdictCard" class="verdict-card hidden">
+          <div class="verdict-header">
+            <div id="verdictBadge" class="verdict-badge">
+              <span id="verdictIcon" class="verdict-icon" aria-hidden="true">&#x2709;</span>
+              <span id="verdictLabel">Email</span>
+            </div>
+            <p id="categoryTag" class="category-tag">Status update</p>
+          </div>
+
+          <h2 id="verdictTitle" class="verdict-title">Email.</h2>
+          <p id="verdictExplanation" class="verdict-explanation"></p>
+
+          <div class="verdict-meta">
+            <span id="confidenceChip" class="meta-chip">Confidence: high</span>
+            <span id="scenarioChip" class="meta-chip">Input type: concise</span>
+          </div>
+
+          <div class="verdict-actions">
+            <button id="tryAnotherButton" class="ghost-button" type="button">
+              Try another
+            </button>
+            <button id="generateButton" class="secondary-button" type="button">
+              Generate Message
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="messageSection" class="message-section hidden">
+        <div class="message-header">
+          <div>
+            <p class="section-kicker">Message Generator</p>
+            <h3>Pick a tone</h3>
+          </div>
+          <div id="toneButtons" class="tone-buttons" role="tablist" aria-label="Message tones">
+            <button class="tone-button active" type="button" data-tone="polite">Polite</button>
+            <button class="tone-button" type="button" data-tone="direct">Direct</button>
+            <button class="tone-button" type="button" data-tone="passiveAggressive">Passive Aggressive</button>
+            <button class="tone-button" type="button" data-tone="brutal">Brutal</button>
+          </div>
+        </div>
+
+        <div class="message-card">
+          <p id="messageOutput" class="message-output"></p>
+          <button id="copyButton" class="copy-button" type="button">Copy Message</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="responses.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
